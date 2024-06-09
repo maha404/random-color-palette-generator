@@ -1,10 +1,10 @@
-import logo from './logo.svg';
+import Palette from './componets/palette';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      
+    <div>
+      <Palette />
     </div>
   );
 }
