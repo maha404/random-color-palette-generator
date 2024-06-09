@@ -26,7 +26,7 @@ export default function Palette() {
         setShowCopiedMsg(true);
         setTimeout(() => {
             setShowCopiedMsg(false);
-            setTimeout(() => setCopiedMsg(''), 500);  // Matchar transition-tiden i CSS
+            setTimeout(() => setCopiedMsg(''), 500);
         }, 2000);
     }
 
@@ -38,7 +38,7 @@ export default function Palette() {
         setShowCopiedMsg(true);
         setTimeout(() => {
             setShowCopiedMsg(false);
-            setTimeout(() => setCopiedMsg(''), 500);  // Matchar transition-tiden i CSS
+            setTimeout(() => setCopiedMsg(''), 500);
         }, 2000);
     }
 
