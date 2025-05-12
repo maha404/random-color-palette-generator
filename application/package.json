@@ -1,5 +1,5 @@
 {
-  "homepage": "https://maha404.github.io/random-color-palette-generator/",
+  "homepage": "http://localhost:8080",
   "name": "application",
   "version": "0.1.0",
   "private": true,

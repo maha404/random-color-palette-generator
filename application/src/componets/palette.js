@@ -14,38 +14,65 @@ export default function Palette() {
         const response = await fetch('http://colormind.io/api/', {
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify({model: "default"}),
+            body: JSON.stringify({ model: "default" }),
         });
         const data = await response.json();
         setPaletteData(data.result);
     }
 
-    function copyToClipboard(hexColor) {
-        navigator.clipboard.writeText(hexColor);
-        setCopiedMsg(`Copied to clipboard: ${hexColor}`);
-        setShowCopiedMsg(true);
-        setTimeout(() => {
-            setShowCopiedMsg(false);
-            setTimeout(() => setCopiedMsg(''), 500);
-        }, 2000);
+    function copyToClipboard(text, isFullPalette = false) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                setCopiedMsg(isFullPalette ? 'Copied the full palette to clipboard!' : `Copied to clipboard: ${text}`);
+                setShowCopiedMsg(true);
+                setTimeout(() => {
+                    setShowCopiedMsg(false);
+                    setTimeout(() => setCopiedMsg(''), 500);
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                fallbackCopyToClipboard(text, isFullPalette);
+            });
+        } else {
+            fallbackCopyToClipboard(text, isFullPalette);
+        }
+    }
+
+    function fallbackCopyToClipboard(text, isFullPalette) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed'; // Avoid scrolling to bottom
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            const msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Fallback: Copying text command was ' + msg);
+            setCopiedMsg(isFullPalette ? 'Copied the full palette to clipboard!' : `Copied to clipboard: ${text}`);
+            setShowCopiedMsg(true);
+            setTimeout(() => {
+                setShowCopiedMsg(false);
+                setTimeout(() => setCopiedMsg(''), 500);
+            }, 2000);
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
     }
 
     function copyFullPalette() {
         const hex = paletteData.map(color => `#${rgbHex(...color)}`);
         const hexcodes = hex.join();
-        navigator.clipboard.writeText(hexcodes);
-        setCopiedMsg('Copied the full palette to clipboard!');
-        setShowCopiedMsg(true);
-        setTimeout(() => {
-            setShowCopiedMsg(false);
-            setTimeout(() => setCopiedMsg(''), 500);
-        }, 2000);
+        copyToClipboard(hexcodes, true);
     }
 
     function handleKeyPress(event) {
         if (event.key === ' ' || event.keyCode === 32) {
             getPalette();
-        } else if(event.key === 'c' || event.key === 'C') {
+        } else if (event.key === 'c' || event.key === 'C') {
             copyFullPalette();
         }
     }
@@ -55,21 +82,21 @@ export default function Palette() {
     return (
         <div className="App">
             <div className='textContainer'>
-                { copiedMsg && 
-                  <p className={`copiedMsg ${showCopiedMsg ? 'show' : ''}`}>{copiedMsg}</p>
-                } 
+                {copiedMsg &&
+                    <p className={`copiedMsg ${showCopiedMsg ? 'show' : ''}`}>{copiedMsg}</p>
+                }
             </div>
 
             <div className='Container'>
-                { paletteData.map((paletteColor, index) => 
-                { const hexColor = `#${rgbHex(...paletteColor)}`;
-                return(
-                    <div className='colorCard' key={index}>
-                        <div className="colors" onClick={() => copyToClipboard(hexColor.toUpperCase())} style={{backgroundColor: hexColor}}>
+                {paletteData.map((paletteColor, index) => {
+                    const hexColor = `#${rgbHex(...paletteColor)}`;
+                    return (
+                        <div className='colorCard' key={index}>
+                            <div className="colors" onClick={() => copyToClipboard(hexColor.toUpperCase())} style={{ backgroundColor: hexColor }}>
+                            </div>
+                            <p>{hexColor.toUpperCase()}</p>
                         </div>
-                        <p>{hexColor.toUpperCase()}</p>
-                    </div>
-                );
+                    );
                 })}
             </div>
             <div className='btnContainer'>
