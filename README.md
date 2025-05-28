@@ -24,4 +24,4 @@ Detta repo innehåller koden i sin helhet, främst frontend eftersom de api:et s
 * Anpassa för mindre enheter, i nuläget funkar webbapplikationen endast på desktop. 
 
 ## 🗒️ Installation och körning
-För att testa detta projekt kan du klona ner projektet lokalet eller köra den publika demoversionen [här](https://palette-generator.mariahalvarsson.se/). 
+För att testa detta projekt kan du klona ner projektet lokalet eller köra den publika demoversionen [här](http://palette-generator.mariahalvarsson.se/). 
