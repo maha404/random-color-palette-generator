@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import rgbHex from 'rgb-hex';
 
 export default function Palette() {
     const [paletteData, setPaletteData] = useState([]);
@@ -40,7 +39,6 @@ export default function Palette() {
             
 
             const paletteResult = data?.results?.[0]?.palette || data?.palette || [];
-            console.log('Palette result:', paletteResult);
             setPaletteData(Array.isArray(paletteResult) ? paletteResult : []);
         } catch (error) {
             console.error('Fetch error:', error);
