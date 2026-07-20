@@ -10,14 +10,41 @@ export default function Palette() {
         getPalette();
     }, []);
 
+    let json_data = {
+        "mode":"transformer", // transformer, diffusion or random
+        "num_colors":5, // max 12, min 2
+        "temperature":"1.2", // max 2.4, min 0
+        "num_results":1, // only request one palette result
+        "adjacency":[
+            "0", "65", "45", "35", "65",
+            "0", "35", "65", "45", "35",
+            "0", "35", "35", "65", "35",
+            "0", "35", "45", "35", "65",
+            "0", "65", "35", "45", "0"
+        ], // nxn adjacency matrix as a flat array of strings
+        "palette":["-", "-", "-", "-", "-"], // locked colors as hex codes, or '-' if blank
+        }
+
     async function getPalette() {
-        const response = await fetch('http://colormind.io/api/', {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({ model: "default" }),
-        });
-        const data = await response.json();
-        setPaletteData(data.result);
+        try {
+            const response = await fetch('https://api.huemint.com/color', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(json_data)
+            });
+
+            const text = await response.text();
+            let data = JSON.parse(text);
+            
+
+            const paletteResult = data?.results?.[0]?.palette || data?.palette || [];
+            console.log('Palette result:', paletteResult);
+            setPaletteData(Array.isArray(paletteResult) ? paletteResult : []);
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
     }
 
     function copyToClipboard(text, isFullPalette = false) {
@@ -64,8 +91,7 @@ export default function Palette() {
     }
 
     function copyFullPalette() {
-        const hex = paletteData.map(color => `#${rgbHex(...color)}`);
-        const hexcodes = hex.join();
+        const hexcodes = paletteData.join();
         copyToClipboard(hexcodes, true);
     }
 
@@ -89,12 +115,11 @@ export default function Palette() {
 
             <div className='Container'>
                 {paletteData.map((paletteColor, index) => {
-                    const hexColor = `#${rgbHex(...paletteColor)}`;
                     return (
                         <div className='colorCard' key={index}>
-                            <div className="colors" onClick={() => copyToClipboard(hexColor.toUpperCase())} style={{ backgroundColor: hexColor }}>
+                            <div className="colors" onClick={() => copyToClipboard(paletteColor.toUpperCase())} style={{ backgroundColor: paletteColor }}>
                             </div>
-                            <p>{hexColor.toUpperCase()}</p>
+                            <p>{paletteColor.toUpperCase()}</p>
                         </div>
                     );
                 })}
