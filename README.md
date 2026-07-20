@@ -4,7 +4,7 @@
 Detta projekt är ett projekt jag skapade som en övning hos [Codementor](https://www.codementor.io/projects). Syftet med projektet var att skapa en webbapplikation som genererar en slumpmässig färgpalett vid tryck på knappar eller tangenter. Anändaren ska också kunna kopiera en färgkod eller hela paletten. 
 
 ## 📖 Projektöversikt 
-Detta repo innehåller koden i sin helhet, främst frontend eftersom de api:et som används kommer från [Colormind API](http://colormind.io/api-access/). 
+Detta repo innehåller koden i sin helhet, främst frontend eftersom de api:et som används kommer från [Huemint API](https://huemint.com/about/). 
 
 ## 🚀 Funktioner
 * **Kopiera en färg**: Användaren kan kopiera hexkoden av en färg genom att klicka på färgen.
@@ -14,7 +14,7 @@ Detta repo innehåller koden i sin helhet, främst frontend eftersom de api:et s
 ## 🔧 Tekniker
 * **React**: För att bygga frontend på webbapplikationen.
 * **CSS**: För styling av webbapplikationen.
-* **Colormind API**: Api:et genererar slumpmässiga paletter.
+* **Huemint API**: API:et genererar slumpmässiga paletter.
 
 ## 📁 Struktur
 * **src/componets/**: Här finns filen för hela webbapplikationen.
